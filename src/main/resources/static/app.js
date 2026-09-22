@@ -13,6 +13,7 @@
   var DEFAULT_PRESET_DAYS = 30;
   var LATE_LIMIT = 20;
   var SVG_NS = 'http://www.w3.org/2000/svg';
+  var THEME_STORAGE_KEY = 'ops-dashboard-theme';
 
   // ---------- API client ----------
 
@@ -102,6 +103,21 @@
     return Math.round((parseIso(iso) - parseIso(today)) / 86400000);
   }
 
+  /** 'dark' -> 'light' and 'light' -> 'dark'. */
+  function nextTheme(theme) {
+    return theme === 'dark' ? 'light' : 'dark';
+  }
+
+  /** The display name for a theme, e.g. on the toggle button. */
+  function themeLabel(theme) {
+    return theme === 'dark' ? '🌙 Dark' : '☀️ Light';
+  }
+
+  /** Anything other than the literal 'light' defaults to 'dark' (AC-4: no stored/unrecognised value is dark). */
+  function resolveTheme(stored) {
+    return stored === 'light' ? 'light' : 'dark';
+  }
+
   // ---------- App ----------
 
   function initApp(document, fetchImpl) {
@@ -109,6 +125,7 @@
 
     var els = {
       status: document.getElementById('status-line'),
+      themeToggle: document.getElementById('theme-toggle'),
       form: document.getElementById('range-form'),
       from: document.getElementById('range-from'),
       to: document.getElementById('range-to'),
@@ -136,8 +153,40 @@
       tickets: [],
       vendors: [],
       error: null,
-      vendorsError: null
+      vendorsError: null,
+      theme: null
     };
+
+    function readStoredTheme() {
+      try {
+        return root.localStorage.getItem(THEME_STORAGE_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function storeTheme(theme) {
+      try {
+        root.localStorage.setItem(THEME_STORAGE_KEY, theme);
+      } catch (e) {
+        // Storage unavailable (private browsing, etc.) - the theme just won't persist.
+      }
+    }
+
+    function applyTheme(theme) {
+      state.theme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      els.themeToggle.textContent = themeLabel(nextTheme(theme));
+      els.themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
+    }
+
+    els.themeToggle.addEventListener('click', function () {
+      var theme = nextTheme(state.theme);
+      storeTheme(theme);
+      applyTheme(theme);
+    });
+
+    applyTheme(resolveTheme(readStoredTheme()));
 
     function svgEl(name, attrs, text) {
       var el = document.createElementNS(SVG_NS, name);
@@ -372,7 +421,9 @@
     formatMoney: formatMoney,
     barWidths: barWidths,
     applyPreset: applyPreset,
-    daysUntil: daysUntil
+    daysUntil: daysUntil,
+    nextTheme: nextTheme,
+    themeLabel: themeLabel
   };
 
   if (typeof module !== 'undefined') {
