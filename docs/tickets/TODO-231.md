@@ -27,6 +27,9 @@ and label colours of the two SVG charts.
   in the dark theme.
 - **AC-3** The choice is persisted in `localStorage` and restored on load, so a
   refresh keeps the theme the user picked.
+- **AC-4** When nothing is stored in `localStorage` yet (first visit, or after
+  clearing storage), the app defaults to the **dark** theme. The OS
+  `prefers-color-scheme` setting is not consulted.
 
 Fences:
 
@@ -36,7 +39,8 @@ Fences:
 
 ## Open questions
 
-- Default theme when nothing is stored: light, dark, or follow the OS setting?
+- ~~Default theme when nothing is stored: light, dark, or follow the OS setting?~~
+  Resolved: dark by default (AC-4).
 
 ## Definition of done
 

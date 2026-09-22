@@ -1,7 +1,65 @@
 /*
- * Marlowe & Finch operations dashboard. Light theme only; colours are hardcoded here.
- * (A theme toggle with CSS variables is ticket TODO-231.)
+ * Marlowe & Finch operations dashboard. Colours live in CSS variables, switched by
+ * data-theme="light"|"dark" on <html> (set in app.js, never a colour value itself).
  */
+
+:root {
+  --bg: #f3f1ec;
+  --text: #1f2a37;
+  --label-color: #4b5563;
+  --subtitle-color: #6b7280;
+  --heading-color: #4a2c19;
+  --header-border: #d9d3c7;
+  --input-bg: #ffffff;
+  --input-text: #1f2a37;
+  --input-border: #c9c2b4;
+  --button-hover-bg: #f8f6f1;
+  --primary-bg: #4a2c19;
+  --primary-hover-bg: #613a22;
+  --primary-text: #ffffff;
+  --preset-active-bg: #e8dfd2;
+  --preset-active-border: #a98467;
+  --status-error: #9f1239;
+  --card-bg: #ffffff;
+  --card-border: #e3ddd1;
+  --table-border: #ece7dd;
+  --vendor-due-border: #c2410c;
+  --vendor-due-bg: #fff4ec;
+  --vendor-due-text: #9a3412;
+  --chart-bar: #2f6f73;
+  --chart-bar-warn: #c2410c;
+  --chart-label: #374151;
+  --chart-value: #6b7280;
+}
+
+:root[data-theme="dark"] {
+  --bg: #14181d;
+  --text: #e5e7eb;
+  --label-color: #b7c0cc;
+  --subtitle-color: #9aa4b2;
+  --heading-color: #e0b787;
+  --header-border: #2a2f36;
+  --input-bg: #1c2127;
+  --input-text: #e5e7eb;
+  --input-border: #3a3f47;
+  --button-hover-bg: #232830;
+  --primary-bg: #8a5a34;
+  --primary-hover-bg: #a06840;
+  --primary-text: #ffffff;
+  --preset-active-bg: #3a3020;
+  --preset-active-border: #c9a06b;
+  --status-error: #f87171;
+  --card-bg: #1c2127;
+  --card-border: #2a2f36;
+  --table-border: #262b32;
+  --vendor-due-border: #fb923c;
+  --vendor-due-bg: #2a1b10;
+  --vendor-due-text: #fdba74;
+  --chart-bar: #4fb3ba;
+  --chart-bar-warn: #fb923c;
+  --chart-label: #d1d5db;
+  --chart-value: #9aa4b2;
+}
 
 * {
   box-sizing: border-box;
@@ -10,8 +68,8 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #f3f1ec;
-  color: #1f2a37;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .app {
@@ -29,18 +87,22 @@ body {
   align-items: flex-end;
   gap: 16px;
   padding-bottom: 16px;
-  border-bottom: 2px solid #d9d3c7;
+  border-bottom: 2px solid var(--header-border);
 }
 
 .header h1 {
   margin: 0;
   font-size: 1.6rem;
-  color: #4a2c19;
+  color: var(--heading-color);
 }
 
 .subtitle {
   margin: 4px 0 0;
-  color: #6b7280;
+  color: var(--subtitle-color);
+}
+
+.theme-toggle {
+  white-space: nowrap;
 }
 
 .range-form {
@@ -52,41 +114,41 @@ body {
 
 .range-field {
   font-size: 0.85rem;
-  color: #4b5563;
+  color: var(--label-color);
 }
 
 .range-field input {
   margin-left: 4px;
   padding: 6px 8px;
-  border: 1px solid #c9c2b4;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
-  background: #ffffff;
-  color: #1f2a37;
+  background: var(--input-bg);
+  color: var(--input-text);
   font: inherit;
 }
 
 button {
   padding: 7px 12px;
-  border: 1px solid #c9c2b4;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
-  background: #ffffff;
-  color: #1f2a37;
+  background: var(--input-bg);
+  color: var(--input-text);
   font: inherit;
   cursor: pointer;
 }
 
 button:hover {
-  background: #f8f6f1;
+  background: var(--button-hover-bg);
 }
 
 #range-apply {
-  background: #4a2c19;
-  border-color: #4a2c19;
-  color: #ffffff;
+  background: var(--primary-bg);
+  border-color: var(--primary-bg);
+  color: var(--primary-text);
 }
 
 #range-apply:hover {
-  background: #613a22;
+  background: var(--primary-hover-bg);
 }
 
 .presets {
@@ -96,8 +158,8 @@ button:hover {
 }
 
 .preset.active {
-  background: #e8dfd2;
-  border-color: #a98467;
+  background: var(--preset-active-bg);
+  border-color: var(--preset-active-border);
   font-weight: 600;
 }
 
@@ -107,11 +169,11 @@ button:hover {
   min-height: 1.4em;
   margin: 12px 0 0;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--subtitle-color);
 }
 
 .status.error {
-  color: #9f1239;
+  color: var(--status-error);
   font-weight: 600;
 }
 
@@ -128,15 +190,15 @@ button:hover {
   display: flex;
   flex-direction: column;
   padding: 18px 20px;
-  background: #ffffff;
-  border: 1px solid #e3ddd1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
 }
 
 .kpi-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2a37;
+  color: var(--text);
 }
 
 .kpi-label {
@@ -144,7 +206,7 @@ button:hover {
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #6b7280;
+  color: var(--subtitle-color);
 }
 
 /* Charts */
@@ -159,8 +221,8 @@ button:hover {
 .chart {
   margin: 0;
   padding: 16px 20px;
-  background: #ffffff;
-  border: 1px solid #e3ddd1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
 }
 
@@ -169,7 +231,7 @@ button:hover {
   margin: 0 0 12px;
   font-size: 1rem;
   font-weight: 600;
-  color: #4a2c19;
+  color: var(--heading-color);
 }
 
 .chart-svg {
@@ -180,19 +242,19 @@ button:hover {
 }
 
 .chart-svg .bar {
-  fill: #2f6f73;
+  fill: var(--chart-bar);
 }
 
 .chart-svg .bar.warn {
-  fill: #c2410c;
+  fill: var(--chart-bar-warn);
 }
 
 .chart-svg .bar-label {
-  fill: #374151;
+  fill: var(--chart-label);
 }
 
 .chart-svg .bar-value {
-  fill: #6b7280;
+  fill: var(--chart-value);
   font-size: 12px;
 }
 
@@ -201,8 +263,8 @@ button:hover {
 .panel {
   padding: 16px 20px;
   margin-bottom: 24px;
-  background: #ffffff;
-  border: 1px solid #e3ddd1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
 }
 
@@ -216,14 +278,14 @@ button:hover {
 .late-table td {
   padding: 8px 10px;
   text-align: left;
-  border-bottom: 1px solid #ece7dd;
+  border-bottom: 1px solid var(--table-border);
 }
 
 .late-table th {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #6b7280;
+  color: var(--subtitle-color);
 }
 
 .late-table .num {
@@ -231,7 +293,7 @@ button:hover {
 }
 
 .late-table tr.empty td {
-  color: #6b7280;
+  color: var(--subtitle-color);
   font-style: italic;
 }
 
@@ -246,13 +308,13 @@ button:hover {
   grid-template-columns: 1fr;
   gap: 2px;
   padding: 10px 12px;
-  border-left: 4px solid #e3ddd1;
-  border-bottom: 1px solid #ece7dd;
+  border-left: 4px solid var(--card-border);
+  border-bottom: 1px solid var(--table-border);
 }
 
 .vendor.renewal-due {
-  border-left-color: #c2410c;
-  background: #fff4ec;
+  border-left-color: var(--vendor-due-border);
+  background: var(--vendor-due-bg);
 }
 
 .vendor-name {
@@ -262,10 +324,10 @@ button:hover {
 .vendor-meta,
 .vendor-end {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--subtitle-color);
 }
 
 .vendor.renewal-due .vendor-end {
-  color: #9a3412;
+  color: var(--vendor-due-text);
   font-weight: 600;
 }
